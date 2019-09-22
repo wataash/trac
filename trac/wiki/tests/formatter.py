@@ -195,7 +195,8 @@ def test_suite(data=None, setup=None, file=__file__, teardown=None,
         suite.addTest(wikisyntax_test_suite(data, setup, file, teardown,
                                             context))
     else:
-        for filename in ('wiki-tests.txt', 'wikicreole-tests.txt'):
+        # for filename in ('wiki-tests.txt', 'wikicreole-tests.txt'):
+        for filename in ('wiki-tests.txt.tmp',):
             filepath = os.path.join(os.path.dirname(file), filename)
             suite.addTest(wikisyntax_test_suite(data, setup, filepath,
                                                 teardown, context))

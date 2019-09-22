@@ -34,6 +34,13 @@ from trac.web.chrome import web_context
 from trac.wiki.formatter import (HtmlFormatter, InlineHtmlFormatter,
                                  OutlineFormatter)
 
+import os
+os.environ['LOGZERO_FORCE_COLOR'] = '1'
+import colorama
+import logzero
+logger = logzero.logger
+colorama.init()
+print(colorama.Fore.GREEN + 'hello')
 
 class WikiTestCase(unittest.TestCase):
 
@@ -107,6 +114,9 @@ class WikiTestCase(unittest.TestCase):
         v = unicode(formatter.generate(**self.generate_opts))
         v = v.replace('\r', '').replace(u'\u200b', '')  # FIXME: keep ZWSP
         v = strip_line_ws(v, leading=False)
+        logger.info('v: %s', v)
+        with open('/tmp/trac.out.gfm', 'w') as f:
+            f.write(v)
         try:
             self.assertEqual(self.expected, v)
         except AssertionError as e:
@@ -174,6 +184,7 @@ def wikisyntax_test_suite(data=None, setup=None, file=None, teardown=None,
     suite = unittest.TestSuite()
 
     def add_test_cases(data, filename):
+        # wiki-tests.txt expanded here
         tests = re.compile('^(%s.*)$' % ('=' * 30), re.MULTILINE).split(data)
         next_line = 1
         line = 0
@@ -190,6 +201,13 @@ def wikisyntax_test_suite(data=None, setup=None, file=None, teardown=None,
             if len(blocks) < 5:
                 blocks.extend([None] * (5 - len(blocks)))
             input, page, oneliner, page_escape_nl, outline = blocks[:5]
+            logger.info('title: %s', title)
+            # logger.debug(input, page, oneliner, page_escape_nl, outline)
+            logger.debug('input: %s', input)
+            logger.debug('page: %s', page)
+            logger.debug('oneliner: %s', oneliner)
+            logger.debug('page_escape_nl: %s', page_escape_nl)
+            logger.debug('outline: %s', outline)
             for cls, expected in [
                     (WikiTestCase, page),
                     (OneLinerTestCase, oneliner and oneliner[:-1]),

@@ -726,6 +726,8 @@ class ImageMacro(WikiMacroBase):
         if link is not None:
             result = tag.a(result, href=link or url,
                            style='padding:0; border:none')
+        # result: {Element}
+        result = u'![image](%s)' % raw_url  # {unicode}
         return result
 
 

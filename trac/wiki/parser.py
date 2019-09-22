@@ -261,3 +261,15 @@ def parse_processor_args(processor_args):
                     keys.append(str(flag))
                     values.append(True)
     return dict(zip(keys, values))
+
+txt = '''
+== h2h2 ==
+
+hello
+'''
+
+if __name__ == '__main__':
+    import trac.core
+    tmp = WikiParser(trac.core.ComponentManager()).parse(txt)  # do nothing!
+    tmp = parse_processor_args(txt)  # ?
+    exit(0)
